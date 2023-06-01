@@ -334,9 +334,17 @@ int mqtt_publish(mqtt_broker_handle_t* broker, const char* topic, const char* ms
 	return mqtt_publish_with_qos(broker, topic, msg, retain, 0, NULL);
 }
 
+int mqtt_publish_bytes(mqtt_broker_handle_t* broker, const char* topic, const uint8_t* msg, uint16_t msglen, uint8_t retain) {
+	return mqtt_publish_bytes_with_qos(broker, topic, msg, msglen, retain, 0, NULL);
+}
+
 int mqtt_publish_with_qos(mqtt_broker_handle_t* broker, const char* topic, const char* msg, uint8_t retain, uint8_t qos, uint16_t* message_id) {
-	uint16_t topiclen = strlen(topic);
 	uint16_t msglen = strlen(msg);
+	return mqtt_publish_bytes_with_qos(broker, topic, (const uint8_t*)msg, msglen, retain, qos, message_id);
+}
+
+int mqtt_publish_bytes_with_qos(mqtt_broker_handle_t* broker, const char* topic, const uint8_t* msg, uint16_t msglen, uint8_t retain, uint8_t qos, uint16_t* message_id) {
+	uint16_t topiclen = strlen(topic);
 
 	uint8_t qos_flag = MQTT_QOS0_FLAG;
 	uint8_t qos_size = 0; // No QoS included
