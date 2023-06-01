@@ -91,7 +91,7 @@ uint16_t mqtt_parse_msg_id(const uint8_t* buf) {
 				// fixed header length + Topic (UTF encoded)
 				// = 1 for "flags" byte + rlb for length bytes + topic size
 				uint8_t rlb = mqtt_num_rem_len_bytes(buf);
-				uint8_t offset = *(buf+1+rlb)<<8;	// topic UTF MSB
+				uint16_t offset = *(buf+1+rlb)<<8;	// topic UTF MSB
 				offset |= *(buf+1+rlb+1);			// topic UTF LSB
 				offset += (1+rlb+2);					// fixed header + topic size
 				id = *(buf+offset)<<8;				// id MSB
@@ -162,7 +162,7 @@ uint16_t mqtt_parse_pub_msg_ptr(const uint8_t* buf, const uint8_t **msg_ptr) {
 		// message starts at
 		// fixed header length + Topic (UTF encoded) + msg id (if QoS>0)
 		uint8_t rlb = mqtt_num_rem_len_bytes(buf);
-		uint8_t offset = (*(buf+1+rlb))<<8;	// topic UTF MSB
+		uint16_t offset = (*(buf+1+rlb))<<8;	// topic UTF MSB
 		offset |= *(buf+1+rlb+1);			// topic UTF LSB
 		offset += (1+rlb+2);				// fixed header + topic size
 
